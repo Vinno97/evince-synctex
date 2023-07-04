@@ -41,8 +41,8 @@ The utility is written for Bash, but relies on three external programs:
   * For monitoring the D-Bus _(duhh)_
 * gdbus
   * For sending D-Bus commands to Evince
-* Python 3
-  * Requesting the Evince window for a PDF file, requires the path to it to be formatted as an URI. I currently use Python to perform the required string escapes.
+* Perl
+  * Requesting the Evince window for a PDF file, requires the path to it to be formatted as an URI. I currently use Perl to perform the required string escapes.
 
 
 ### Help
