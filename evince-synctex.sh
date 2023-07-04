@@ -72,8 +72,8 @@ sync() {
 
     echo "Syncing Evince to line $line of '$(basename "$srcpath")' for '$(basename "$pdfpath")'"
 
-    # TODO: Try to remove python dependency
-    pdfuri=file://$(printf '%s' "$pdfpath" | python -c "import urllib.parse;print(urllib.parse.quote(input()))")
+    # TODO: Try to remove perl dependency
+    pdfuri=$(perl -MURI::file -e 'print URI::file->new(<STDIN>)."\n"' <<<"$pdfpath")
 
     destination=$(gdbus call \
     --session \
