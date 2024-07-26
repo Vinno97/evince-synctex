@@ -49,6 +49,12 @@ Examples:
         evince-synctex.sh listen gedit %f +%l
 "
 
+urldecode() {
+    # https://stackoverflow.com/a/37840948
+    local url=${*//+/ }     # replace "+" with " " (space)
+    echo -e "${url//%/\\x}" # replace "%" with "\x" and do hex expansion
+}
+
 sync() {
     if [ ! $# -eq 3 ]; then
         echo -e "Expected exactly 3 arguments for sync, got $#\n$usage" 1>&2
@@ -120,7 +126,9 @@ listen() {
 
             echo "=================================================="
 
-            filename=$(printf '%s' "$filename" | sed 's!%20! !' | head -c -1 | tail -c +9)
+            filename=$(urldecode "$filename")
+            filename=${filename/#\"file:\/\//} # strips the leading '"file://'
+            filename=${filename/%\"/}          # strips the trailing '"'
             echo "Filename: $filename"
             echo "Line number: $linenr"
 
