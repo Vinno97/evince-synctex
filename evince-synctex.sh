@@ -1,4 +1,6 @@
 #!/bin/bash
+# Sync LaTeX editor with Evince
+# shellcheck disable=2206
 
 set -e
 # set -x
@@ -71,7 +73,7 @@ sync() {
     if ! [ -f "$pdfpath" ]; then
         echo "Warning: $pdfpath does not exists." 1>&2
     fi
-    if ! [ $line -eq $line ] 2>/dev/null; then
+    if ! [ "$line" -eq "$line" ] 2>/dev/null; then
         echo -e "<line> should be a number, got $line\n$usage" 1>&2
         exit 1
     fi
@@ -95,7 +97,7 @@ sync() {
 
     gdbus call \
     --session \
-    -d $destination \
+    -d "$destination" \
     -o /org/gnome/evince/Window/0 \
     -m org.gnome.evince.Window.SyncView \
     "$srcpath" "($line, 1)" 0 > /dev/null
@@ -105,7 +107,7 @@ sync() {
 }
 
 listen() {
-    cmd=${@:-'code --goto %f:%l'}
+    cmd=${*:-'code --goto %f:%l'}
     echo "Listening to Evince SyncSource requests. Executing '$cmd' on new signals"
     # echo "Running command '$cmd' on SyncSource request"
 
@@ -119,9 +121,9 @@ listen() {
             exc_cmd=($cmd)
             filename=""
             linenr=""
-        elif [ ${parts[0]} == string ]; then
+        elif [ "${parts[0]}" == string ]; then
             filename=${parts[1]}
-        elif [ ${parts[0]} == int32 ] && [ -z "$linenr" ]; then
+        elif [ "${parts[0]}" == int32 ] && [ -z "$linenr" ]; then
             linenr=${parts[1]}
 
             echo "=================================================="
@@ -138,7 +140,7 @@ listen() {
                 exc_cmd[i]=${exc_cmd[$i]//%f/"$filename"}
             done
 
-            echo "Executing: '${exc_cmd[@]}'"
+            echo "Executing: '${exc_cmd[*]}'"
 
             "${exc_cmd[@]}" < /dev/null
         fi
