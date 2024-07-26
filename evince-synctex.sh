@@ -134,8 +134,8 @@ listen() {
 
             for i in "${!exc_cmd[@]}"; do
                 # Do all replacements here
-                exc_cmd[$i]=$(echo "${exc_cmd[$i]}" | sed "s/%l/$linenr/")
-                exc_cmd[$i]=$(echo "${exc_cmd[$i]}" | sed 's!%f!'"$filename"'!')
+                exc_cmd[i]=${exc_cmd[$i]//%l/"$linenr"}
+                exc_cmd[i]=${exc_cmd[$i]//%f/"$filename"}
             done
 
             echo "Executing: '${exc_cmd[@]}'"
